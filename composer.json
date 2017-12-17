@@ -1,0 +1,17 @@
+{
+    "name": "banqhsia/chinese-number",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Benyi",
+            "email": "banqhsia@msn.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+      "psr-4": {
+        "banqhsia\\ChineseNumber\\": "src/"
+      }
+    }
+}
