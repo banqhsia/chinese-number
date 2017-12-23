@@ -1,9 +1,9 @@
 <?php
-namespace banqhsia\ChineseNumber;
+namespace banqhsia\ChineseNumber\Types;
 
 use banqhsia\ChineseNumber\Helpers\Helper;
 
-class ChineseNumber
+class Integers
 {
 
     /**
