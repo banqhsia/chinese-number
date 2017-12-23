@@ -19,6 +19,9 @@ class Helper
 
     /**
      * 檢查給定的數字是否小於零（負數）
+     *
+     * @param integer $number
+     * @return boolean
      */
     public static function isNegative($number)
     {
@@ -26,8 +29,15 @@ class Helper
     }
 
     /**
-     * 將陣列攤平變成字串
-     **/
+     * 攤平陣列
+     *
+     * 將轉換完成的陣列攤平變成字串
+     *
+     * @param array $array
+     * @param boolean $reverse
+     * @param string $glue
+     * @return $flattened 已變成字串的轉換結果
+     */
     public static function flattenToString(Array $array, $reverse = true, $glue = "")
     {
         $array = ($reverse) ? array_reverse($array) : $array;
@@ -38,25 +48,33 @@ class Helper
     }
 
     /**
-     * Trim
+     * 檢測數字是否介於某一範圍
+     *
+     * @param integer $input
+     * @param integer $from
+     * @param integer $to
+     * @return boolean
      */
-    // public static function trimTen($string)
-    // {
-    //     return preg_replace("/一十(.{1})/", "十$1", $string);
-    // }
-
     public static function isBetween($input, $from, $to)
     {
         return ($input >= $from && $input <= $to);
     }
 
+    /**
+     * 去除零碎事項
+     *
+     * 如 「一十五」變為「十五」
+     *
+     * @param string $string
+     * @return $string 處理過的字串
+     */
     public static function trim($string)
     {
 
         $string = preg_replace('/(\*+)$/m', "", $string);
         $string = preg_replace('/\*+/', "零", $string);
 
-        $string = preg_replace("/^一十(.{1})?/", "十$1", $string);
+        $string = preg_replace("/^(一|壹)(十|拾)(.{1})?/", "$2$3", $string);
 
         return $string;
     }
