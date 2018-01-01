@@ -1,4 +1,4 @@
-<?
+<?php
 namespace banqhsia\ChineseNumber\Helpers;
 
 class Helper

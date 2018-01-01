@@ -3,7 +3,7 @@ namespace banqhsia\ChineseNumber\Types;
 
 use banqhsia\ChineseNumber\Helpers\Helper;
 
-class Integers extends Numbers
+class Decimals extends Numbers
 {
 
     /**
@@ -14,10 +14,12 @@ class Integers extends Numbers
     public function __construct($number = 0)
     {
         $this->input = $number;
-
-
     }
 
 
+    public function handler()
+    {
+        return "";
+    }
 
 }
