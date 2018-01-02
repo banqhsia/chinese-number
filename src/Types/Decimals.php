@@ -1,8 +1,6 @@
 <?php
 namespace banqhsia\ChineseNumber\Types;
 
-use banqhsia\ChineseNumber\Helpers\Helper;
-
 class Decimals extends Numbers
 {
 
@@ -17,9 +15,38 @@ class Decimals extends Numbers
     }
 
 
+    /**
+     * 處理小數轉換
+     *
+     * @return $result 轉換為中文數字的結果
+     */
     public function handler()
     {
-        return "";
+
+        // 將字串按照給定的長度切割為陣列
+        $chunked = static::chunk($this->input, 1);
+
+        $result = [];
+        foreach ($chunked as $i => $set) {
+            $result[] = static::$numbers[$this->case][$set];
+        }
+
+        return $result;
+    }
+
+    /**
+     * 取得結果值
+     */
+    public function getValue()
+    {
+
+        // 輸入的數字為零，不處理
+        if ( static::isZero($this->input) ) {
+            return [];
+        }
+
+        return $this->handler();
+
     }
 
 }

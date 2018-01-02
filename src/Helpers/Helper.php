@@ -1,7 +1,7 @@
 <?php
 namespace banqhsia\ChineseNumber\Helpers;
 
-class Helper
+trait Helper
 {
 
     /**
@@ -58,6 +58,17 @@ class Helper
     public static function isBetween($input, $from, $to)
     {
         return ($input >= $from && $input <= $to);
+    }
+
+    /**
+     * 是否為零
+     *
+     * @param integer $number
+     * @return boolean
+     */
+    public static function isZero($number = 0)
+    {
+        return ($number == 0);
     }
 
     /**
