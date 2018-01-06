@@ -9,25 +9,9 @@ abstract class Numbers
     use Helper;
 
     /**
-     * 大小寫數字們
+     * 語系
      */
-    static $numbers = [
-        ['○', '一', '二', '三', '四', '五', '六', '七', '八', '九'],
-        ['零', '壹', '貳', '參', '肆', '伍', '陸', '柒', '捌', '玖']
-    ];
-
-    /**
-     * 每個千單位的數字們
-     */
-    static $thousand = [
-        ['', '十', '百', '千'],
-        ['', '拾', '佰', '仟']
-    ];
-
-    /**
-     * 數字系統
-     */
-    static $systems = ['', '萬', '億', '兆', '京', '垓', '秭', '壤', '溝', '澗', '正', '載'];
+    public static $locale = Locale\TW::class;
 
     /**
      * 是否以大寫數字進行轉換
@@ -36,7 +20,18 @@ abstract class Numbers
      */
     public $case = 0;
 
+    /**
+     * (抽象方法) 各數值的處理方法
+     *
+     * @return string
+     */
     abstract public function handler();
+
+    /**
+     * (抽象方法) 取得結果字串
+     *
+     * @return mixed
+     */
     abstract public function getValue();
 
 

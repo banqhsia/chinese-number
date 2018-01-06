@@ -6,8 +6,11 @@ use banqhsia\ChineseNumber\Types\Decimals;
 
 use banqhsia\ChineseNumber\Helpers\Helper;
 
+use banqhsia\ChineseNumber\Locale\Locale;
+
 class ChineseNumber
 {
+    use Helper;
 
     /**
      * 分割出的數字
@@ -45,14 +48,11 @@ class ChineseNumber
     protected $delimiter = "，";
 
     /**
-     * 貨幣格式的前輟、後輟
+     * 是否以大寫數字進行轉換
      *
-     * @var array
+     * @var integer
      */
-    protected $currency_units = [
-        'prepend' => '新臺幣',
-        'append' => '元'
-    ];
+    protected $case = 0;
 
     /**
      * Construct
@@ -63,6 +63,17 @@ class ChineseNumber
     {
         $this->parseNumber(floatval($number));
     }
+
+    /**
+     * 設定語系
+     *
+     * @param string $value
+     */
+    public static function setLocale($value)
+    {
+        return Locale::setLocale($value);
+    }
+
 
     /**
      * 輸入一個被轉換的新數字
@@ -85,7 +96,7 @@ class ChineseNumber
     {
 
         // 檢查輸入的數字是否為負數
-        if ( Helper::isNegative($number) ) {
+        if ( static::isNegative($number) ) {
 
             // 去除負號，當作整數分開處理
             $this->minus = true;
@@ -110,25 +121,25 @@ class ChineseNumber
     protected function render()
     {
 
-        $integers = Helper::flattenToString(
+        $integers = static::flattenToString(
             $this->Integers->getValue(),
             true,
             ($this->comma) ? $this->delimiter : ""
         );
 
-        $decimals = Helper::flattenToString( $this->Decimals->getValue() );
+        $decimals = static::flattenToString( $this->Decimals->getValue() );
 
         $result = (function() use ($integers, $decimals) {
 
-            $result = $integers.($decimals ? "點" .$decimals: NULL);
+            $result = $integers.($decimals ? Locale::dot() .$decimals: NULL);
 
-            return Helper::trim( $result );
+            return $this->trim( $result );
 
         })();
 
         // 負數模式
         if ( $this->minus && $this->numbers[0] ) {
-            $result = "負".$result;
+            $result = Locale::minus() .$result;
         }
 
         // 貨幣模式
@@ -172,8 +183,8 @@ class ChineseNumber
         $this->currency = true;
 
         $this->currency_units = [
-            'prepend' => ($prepend) ? $prepend : $this->currency_units['prepend'],
-            'append' => ($append) ? $append : $this->currency_units['append'],
+            'prepend' => ($prepend) ? $prepend : Locale::currency_units()['prepend'],
+            'append' => ($append) ? $append : Locale::currency_units()['append'],
         ];
 
         return $this;
@@ -186,7 +197,9 @@ class ChineseNumber
      */
     public function upper()
     {
-        $this->Integers->case = $this->Decimals->case = true;
+        $this->case = 1;
+
+        $this->Integers->case = $this->Decimals->case = $this->case;
 
         return $this;
     }
@@ -204,6 +217,37 @@ class ChineseNumber
     }
 
 
+    /**
+     * 去除零碎事項
+     *
+     * 如 「一十五」變為「十五」
+     *
+     * @param string $string
+     * @return $string 處理過的字串
+     */
+    public function trim($string)
+    {
+
+        $string = preg_replace('/(\*+)$/m', "", $string);
+        $string = preg_replace('/\*+/', Locale::numbers()[$this->case][0], $string);
+
+        $string = preg_replace( (function(){
+
+            $tens = Locale::numbers()[$this->case][1];
+            $ones = Locale::thousand()[$this->case][1];
+
+            return "/^($tens)($ones)(.{1})?/";
+
+        })(), "$2$3", $string);
+
+        return $string;
+    }
+
+    /**
+     * 傳回 render() 的結果
+     *
+     * @return string
+     */
     public function __toString()
     {
         return $this->render();

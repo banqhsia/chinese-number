@@ -1,6 +1,8 @@
 <?php
 namespace banqhsia\ChineseNumber\Types;
 
+use banqhsia\ChineseNumber\Locale\Locale;
+
 class Decimals extends Numbers
 {
 
@@ -18,7 +20,7 @@ class Decimals extends Numbers
     /**
      * 處理小數轉換
      *
-     * @return $result 轉換為中文數字的結果
+     * @return string $result 轉換為中文數字的結果
      */
     public function handler()
     {
@@ -28,14 +30,16 @@ class Decimals extends Numbers
 
         $result = [];
         foreach ($chunked as $i => $set) {
-            $result[] = static::$numbers[$this->case][$set];
+            $result[] = Locale::numbers()[$this->case][$set];
         }
 
         return $result;
     }
 
     /**
-     * 取得結果值
+     * 取得結果字串
+     *
+     * @return mixed
      */
     public function getValue()
     {

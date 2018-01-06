@@ -71,25 +71,6 @@ trait Helper
         return ($number == 0);
     }
 
-    /**
-     * 去除零碎事項
-     *
-     * 如 「一十五」變為「十五」
-     *
-     * @param string $string
-     * @return $string 處理過的字串
-     */
-    public static function trim($string)
-    {
-
-        $string = preg_replace('/(\*+)$/m', "", $string);
-        $string = preg_replace('/\*+/', "零", $string);
-
-        $string = preg_replace("/^(一|壹)(十|拾)(.{1})?/", "$2$3", $string);
-
-        return $string;
-    }
-
 }
 
 
