@@ -59,9 +59,12 @@ class ChineseNumber
      *
      * @param integer $number
      */
-    public function __construct($number = 0)
+    public function __construct($number = 0, $locale = 'tw')
     {
         $this->parseNumber(floatval($number));
+
+        $this->setLocale($locale);
+
     }
 
     /**
@@ -69,9 +72,9 @@ class ChineseNumber
      *
      * @param string $value
      */
-    public static function setLocale($value)
+    public static function setLocale($locale)
     {
-        return Locale::setLocale($value);
+        return Locale::setLocale($locale);
     }
 
 
@@ -81,9 +84,9 @@ class ChineseNumber
      * @param integer $number
      * @return ChineseNumber
      */
-    public static function number($number = 0)
+    public static function number($number = 0, $locale = 'tw')
     {
-        return new ChineseNumber($number);
+        return new ChineseNumber($number, $locale);
     }
 
     /**

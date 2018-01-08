@@ -22,7 +22,7 @@ class Locale
         $locale = strtolower($locale);
 
         if ( !array_key_exists( strtolower($locale), static::$locale_list) ) {
-            throw new \Exception ("Locale {$locale} not supported");
+            throw new \Exception ("Locale \"{$locale}\" is not supported.");
         }
 
         return static::$locale = static::$locale_list[$locale];

@@ -9,11 +9,6 @@ abstract class Numbers
     use Helper;
 
     /**
-     * 語系
-     */
-    public static $locale = Locale\TW::class;
-
-    /**
      * 是否以大寫數字進行轉換
      *
      * @var boolean
