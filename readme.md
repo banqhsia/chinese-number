@@ -5,7 +5,7 @@
 1. 安裝套件
 
 	```
-	$ composer require banqhsia/ChineseNumber
+	$ composer require banqhsia/chinese-number
 
 	```
 
