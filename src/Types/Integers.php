@@ -28,34 +28,28 @@ class Integers extends Numbers
         $chunked = static::chunk($this->input, 4);
 
         foreach ($chunked as $i => $set) {
-
             $set_chunked = static::chunk($set, 1);
 
             $thousand = [];
             foreach ($set_chunked as $j => $num) {
-
                 // 如果該位數為「0」，則註記 「*」
                 $proceed = ( $num == 0 ) ? "*"
-                    : Locale::numbers()[$this->case][$num].Locale::thousand()[$this->case][$j]
+                    : Locale::numbers()[$this->case][$num] . Locale::thousand()[$this->case][$j]
                 ;
 
                 $thousand[] = $proceed;
-
             }
 
-            $result[] = (function() use ($thousand, $i){
+            $result[] = (function () use ($thousand, $i) {
 
                 $thousand = static::flattenToString($thousand);
                 $thousand = preg_replace('/(\*+).?$/', "", $thousand);
 
-                return ($thousand) ? $thousand.Locale::systems()[$i] : NULL;
-
+                return ($thousand) ? $thousand . Locale::systems()[$i] : null;
             })();
-
         }
 
         return $result;
-
     }
 
     /**
@@ -67,12 +61,10 @@ class Integers extends Numbers
     {
 
         // 輸入的數字為零，不處理
-        if ( static::isZero($this->input) ) {
+        if (static::isZero($this->input)) {
             return [Locale::numbers()[$this->case][0]];
         }
 
         return $this->handler();
-
     }
-
 }

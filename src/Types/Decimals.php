@@ -45,12 +45,10 @@ class Decimals extends Numbers
     {
 
         // 輸入的數字為零，不處理
-        if ( static::isZero($this->input) ) {
+        if (static::isZero($this->input)) {
             return [];
         }
 
         return $this->handler();
-
     }
-
 }

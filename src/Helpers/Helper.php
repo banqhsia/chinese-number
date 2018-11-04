@@ -70,7 +70,4 @@ trait Helper
     {
         return ($number == 0);
     }
-
 }
-
-

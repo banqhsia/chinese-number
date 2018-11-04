@@ -3,7 +3,6 @@ namespace banqhsia\ChineseNumber\Locale;
 
 class TW
 {
-
     /**
      * 貨幣格式的前輟、後輟
      *
@@ -44,6 +43,4 @@ class TW
      * 負
      */
     static $minus = '負';
-
-
 }

@@ -1,12 +1,10 @@
 <?php
 namespace banqhsia\ChineseNumber;
 
-use banqhsia\ChineseNumber\Types\Integers;
-use banqhsia\ChineseNumber\Types\Decimals;
-
-use banqhsia\ChineseNumber\Helpers\Helper;
-
 use banqhsia\ChineseNumber\Locale\Locale;
+use banqhsia\ChineseNumber\Helpers\Helper;
+use banqhsia\ChineseNumber\Types\Decimals;
+use banqhsia\ChineseNumber\Types\Integers;
 
 class ChineseNumber
 {
@@ -64,7 +62,6 @@ class ChineseNumber
         $this->parseNumber(floatval($number));
 
         $this->setLocale($locale);
-
     }
 
     /**
@@ -76,7 +73,6 @@ class ChineseNumber
     {
         return Locale::setLocale($locale);
     }
-
 
     /**
      * 輸入一個被轉換的新數字
@@ -99,11 +95,10 @@ class ChineseNumber
     {
 
         // 檢查輸入的數字是否為負數
-        if ( static::isNegative($number) ) {
-
+        if (static::isNegative($number)) {
             // 去除負號，當作整數分開處理
             $this->minus = true;
-            $number = abs( $number );
+            $number = abs($number);
         }
 
         // 依照小數點將數字切割為兩部分
@@ -111,7 +106,6 @@ class ChineseNumber
 
         $this->Integers = new Integers($this->numbers[1] ?? 0);
         $this->Decimals = new Decimals($this->numbers[2] ?? 0);
-
     }
 
     /**
@@ -130,30 +124,27 @@ class ChineseNumber
             ($this->comma) ? $this->delimiter : ""
         );
 
-        $decimals = static::flattenToString( $this->Decimals->getValue() );
+        $decimals = static::flattenToString($this->Decimals->getValue());
 
-        $result = (function() use ($integers, $decimals) {
+        $result = (function () use ($integers, $decimals) {
 
-            $result = $integers.($decimals ? Locale::dot() .$decimals: NULL);
+            $result = $integers . ($decimals ? Locale::dot() . $decimals : null);
 
-            return $this->trim( $result );
-
+            return $this->trim($result);
         })();
 
         // 負數模式
-        if ( $this->minus && $this->numbers[0] ) {
-            $result = Locale::minus() .$result;
+        if ($this->minus && $this->numbers[0]) {
+            $result = Locale::minus() . $result;
         }
 
         // 貨幣模式
-        if ( $this->currency ) {
-            $result = $this->currency_units['prepend'].$result.$this->currency_units['append'];
+        if ($this->currency) {
+            $result = $this->currency_units['prepend'] . $result . $this->currency_units['append'];
         }
 
         return $result;
-
     }
-
 
     /**
      * 加入位數間隔
@@ -163,7 +154,7 @@ class ChineseNumber
      * @param string $delimiter
      * @return $this
      */
-    public function comma(string $delimiter = NULL)
+    public function comma(string $delimiter = null)
     {
 
         $this->comma = true;
@@ -219,7 +210,6 @@ class ChineseNumber
         return $this;
     }
 
-
     /**
      * 去除零碎事項
      *
@@ -234,13 +224,12 @@ class ChineseNumber
         $string = preg_replace('/(\*+)$/m', "", $string);
         $string = preg_replace('/\*+/', Locale::numbers()[$this->case][0], $string);
 
-        $string = preg_replace( (function(){
+        $string = preg_replace((function () {
 
             $tens = Locale::numbers()[$this->case][1];
             $ones = Locale::thousand()[$this->case][1];
 
             return "/^($tens)($ones)(.{1})?/";
-
         })(), "$2$3", $string);
 
         return $string;

@@ -28,6 +28,4 @@ abstract class Numbers
      * @return mixed
      */
     abstract public function getValue();
-
-
 }

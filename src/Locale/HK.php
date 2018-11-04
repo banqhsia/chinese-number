@@ -3,7 +3,6 @@ namespace banqhsia\ChineseNumber\Locale;
 
 class HK extends TW
 {
-
     /**
      * 貨幣格式的前輟、後輟
      *
@@ -13,5 +12,4 @@ class HK extends TW
         'prepend' => '港幣',
         'append' => '元'
     ];
-
 }
