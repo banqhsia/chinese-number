@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<ruleset name="Custom">
+  <rule ref="PSR2">
+    <exclude name="Generic.Files.LineLength"/>
+  </rule>
+
+  <!-- 禁止使用長陣列 -->
+  <rule ref="Generic.Arrays.DisallowLongArraySyntax" />
+
+  <!-- 字串連接的 . 左右需要空白 -->
+  <rule ref="Squiz.Strings.ConcatenationSpacing">
+    <properties>
+        <property name="spacing" value="1" />
+    </properties>
+  </rule>
+
+  <!-- 檢查類別成員、屬性上下的距離空白行 -->
+  <rule ref="Squiz.WhiteSpace.MemberVarSpacing">
+      <properties>
+          <property name="spacing" value="1" />
+          <property name="spacingBeforeFirst" value="0" />
+      </properties>
+  </rule>
+
+  <!-- 檢查空白行 -->
+  <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+      <properties>
+        <property name="ignoreBlankLines" value="false"/>
+      </properties>
+  </rule>
+
+  <!-- 檢查運算子前後的空白 -->
+  <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+      <properties>
+          <property name="ignoreNewlines" value="true" />
+      </properties>
+  </rule>
+
+  <!-- 檢查註解的程式碼 -->
+  <rule ref="Squiz.PHP.CommentedOutCode">
+      <properties>
+          <property name="maxPercentage" value="35" />
+      </properties>
+  </rule>
+
+  <!-- 循環複雜度限制 -->
+  <rule ref="Generic.Metrics.CyclomaticComplexity">
+    <properties>
+        <property name="complexity" value="4" />
+        <property name="absoluteComplexity" value="5" />
+    </properties>
+  </rule>
+
+  <!-- 程式碼分析 -->
+  <rule ref="Generic.CodeAnalysis">
+    <exclude name="Generic.CodeAnalysis.AssignmentInCondition" />
+  </rule>
+
+  <rule ref="Squiz.Commenting.FunctionComment">
+    <!-- 不需要 scalar style 的 type hint -->
+    <exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing"/>
+    <!-- 不強制所有 type hint -->
+    <exclude name="Squiz.Commenting.FunctionComment.TypeHintMissing"/>
+    <!-- 不強制 @param 參數與 @throws 的說明 -->
+    <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+    <exclude name="Squiz.Commenting.FunctionComment.EmptyThrows"/>
+    <!-- 不強制參數對齊 -->
+    <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType"/>
+    <!-- 接受 bool 或是 int 等，而不強制 integer 或是 boolean -->
+    <exclude name="Squiz.Commenting.FunctionComment.IncorrectParamVarName"/>
+    <exclude name="Squiz.Commenting.FunctionComment.InvalidReturn"/>
+  </rule>
+
+  <exclude-pattern>vendor/</exclude-pattern>
+  <exclude-pattern>tests/**</exclude-pattern>
+
+</ruleset>
