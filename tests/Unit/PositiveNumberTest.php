@@ -5,7 +5,7 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use banqhsia\ChineseNumber\ChineseNumber;
 
-class ChineseNumberTest extends TestCase
+class PositiveNumberTest extends TestCase
 {
     /**
      * @var ChineseNumber
