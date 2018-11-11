@@ -78,22 +78,24 @@ class ChineseNumber
     /**
      * 設定語系
      *
-     * @param string $value
+     * @param string $locale
+     * @return void
      */
     public static function setLocale($locale)
     {
-        return Locale::setLocale($locale);
+        Locale::setLocale($locale);
     }
 
     /**
      * 輸入一個被轉換的新數字
      *
-     * @param integer $number
-     * @return ChineseNumber
+     * @param int $number
+     * @param string $locale
+     * @return ChinsesNumber
      */
     public static function number($number = 0, $locale = 'tw')
     {
-        return new ChineseNumber($number, $locale);
+        return new static($number, $locale);
     }
 
     /**
@@ -189,7 +191,7 @@ class ChineseNumber
     /**
      * 轉換為負數結果
      *
-     * @return void
+     * @return self
      */
     public function minus()
     {
