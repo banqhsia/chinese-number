@@ -93,19 +93,17 @@ class ChineseNumber
      */
     protected function parseNumber(float $number)
     {
+        $numberObj = new Number($number);
 
         // 檢查輸入的數字是否為負數
-        if (static::isNegative($number)) {
+        if ($numberObj->isNegative()) {
             // 去除負號，當作整數分開處理
             $this->minus = true;
-            $number = abs($number);
+            $number = $numberObj->getAbsolute();
         }
 
-        // 依照小數點將數字切割為兩部分
-        preg_match("/(\d+)\.?(\d+)?/", $number, $this->numbers);
-
-        $this->Integers = new Integers($this->numbers[1] ?? 0);
-        $this->Decimals = new Decimals($this->numbers[2] ?? 0);
+        $this->Integers = new Integers($numberObj->getIntegerPart() ?? 0);
+        $this->Decimals = new Decimals($numberObj->getDecimalPart() ?? 0);
     }
 
     /**
@@ -134,7 +132,7 @@ class ChineseNumber
         })();
 
         // 負數模式
-        if ($this->minus && $this->numbers[0]) {
+        if ($this->minus) {
             $result = Locale::minus() . $result;
         }
 
