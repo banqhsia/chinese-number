@@ -10,6 +10,6 @@ class HK extends TW
      */
     static $currency_units = [
         'prepend' => '港幣',
-        'append' => '元'
+        'append' => '元',
     ];
 }

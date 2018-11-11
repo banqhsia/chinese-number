@@ -38,7 +38,7 @@ trait Helper
      * @param string $glue
      * @return $flattened 已變成字串的轉換結果
      */
-    public static function flattenToString(Array $array, $reverse = true, $glue = "")
+    public static function flattenToString(array $array, $reverse = true, $glue = "")
     {
         $array = ($reverse) ? array_reverse($array) : $array;
 
@@ -68,6 +68,6 @@ trait Helper
      */
     public static function isZero($number = 0)
     {
-        return ($number == 0);
+        return (0 == $number);
     }
 }
