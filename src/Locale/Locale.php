@@ -3,7 +3,8 @@ namespace banqhsia\ChineseNumber\Locale;
 
 class Locale
 {
-    public static $locale = TW::class;
+    // TODO: Setting to CN in order to make sure setLocale() works.
+    public static $locale = CN::class;
 
     public static $locale_list = [
         'tw' => TW::class,
@@ -20,7 +21,7 @@ class Locale
     {
         $locale = strtolower($locale);
 
-        if (!array_key_exists(strtolower($locale), static::$locale_list)) {
+        if (! array_key_exists(strtolower($locale), static::$locale_list)) {
             throw new \Exception("Locale \"{$locale}\" is not supported.");
         }
 
@@ -32,6 +33,8 @@ class Locale
      *
      * @param string $value
      * @param array $args
+     *
+     * @return string
      */
     public static function __callStatic($value, $args)
     {
