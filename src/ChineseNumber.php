@@ -55,11 +55,22 @@ class ChineseNumber
     /**
      * Construct
      *
-     * @param integer $number
+     * @param int|float $number
+     * @param string $locale
      */
     public function __construct($number = 0, $locale = 'tw')
     {
-        $this->parseNumber(floatval($number));
+        $this->number = new Number($number);
+
+        // 檢查輸入的數字是否為負數
+        if ($this->number->isNegative()) {
+            // 去除負號，當作整數分開處理
+            $this->minus = true;
+            $number = $this->number->getAbsolute();
+        }
+
+        $this->integers = new Integers($this->number->getIntegerPart() ?? 0);
+        $this->decimals = new Decimals($this->number->getDecimalPart() ?? 0);
 
         $this->setLocale($locale);
     }
@@ -86,27 +97,6 @@ class ChineseNumber
     }
 
     /**
-     * 解析數字是否為負數
-     *
-     * @param float $number
-     * @return void
-     */
-    protected function parseNumber(float $number)
-    {
-        $numberObj = new Number($number);
-
-        // 檢查輸入的數字是否為負數
-        if ($numberObj->isNegative()) {
-            // 去除負號，當作整數分開處理
-            $this->minus = true;
-            $number = $numberObj->getAbsolute();
-        }
-
-        $this->Integers = new Integers($numberObj->getIntegerPart() ?? 0);
-        $this->Decimals = new Decimals($numberObj->getDecimalPart() ?? 0);
-    }
-
-    /**
      * 輸出結果
      *
      * 將已經轉換完的數字陣列，依照要求進行修飾（如負數、貨幣樣式等）
@@ -117,12 +107,12 @@ class ChineseNumber
     {
 
         $integers = static::flattenToString(
-            $this->Integers->getValue(),
+            $this->integers->getValue(),
             true,
             ($this->comma) ? $this->delimiter : ""
         );
 
-        $decimals = static::flattenToString($this->Decimals->getValue());
+        $decimals = static::flattenToString($this->decimals->getValue());
 
         $result = (function () use ($integers, $decimals) {
 
@@ -191,7 +181,7 @@ class ChineseNumber
     {
         $this->case = 1;
 
-        $this->Integers->case = $this->Decimals->case = $this->case;
+        $this->integers->case = $this->decimals->case = $this->case;
 
         return $this;
     }
