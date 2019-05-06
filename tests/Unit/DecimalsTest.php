@@ -7,6 +7,8 @@ use banqhsia\ChineseNumber\ChineseNumber;
 
 class DecimalsTest extends TestCase
 {
+    use AssertionHelper;
+
     /**
      * @var ChineseNumber
      */
@@ -29,19 +31,4 @@ class DecimalsTest extends TestCase
         $this->resultShouldBe('一百○五點三三');
     }
 
-    public function tesrDown()
-    {
-        unset($this->target);
-        unset($this->actual);
-    }
-
-    private function givenNumber($number)
-    {
-        $this->actual = (string) $this->target->number($number);
-    }
-
-    private function resultShouldBe($expected)
-    {
-        $this->assertEquals($expected, $this->actual);
-    }
 }

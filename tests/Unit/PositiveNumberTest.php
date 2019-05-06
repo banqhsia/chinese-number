@@ -7,6 +7,8 @@ use banqhsia\ChineseNumber\ChineseNumber;
 
 class PositiveNumberTest extends TestCase
 {
+    use AssertionHelper;
+
     /**
      * @var ChineseNumber
      */
@@ -46,15 +48,5 @@ class PositiveNumberTest extends TestCase
     {
         $this->givenNumber($given);
         $this->resultShouldBe($expected);
-    }
-
-    private function givenNumber($number)
-    {
-        $this->actual = (string) $this->target->number($number);
-    }
-
-    private function resultShouldBe($expected)
-    {
-        $this->assertEquals($expected, $this->actual);
     }
 }
