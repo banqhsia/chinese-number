@@ -26,46 +26,34 @@ class NumberTest extends TestCase
         $this->assertFalse($this->target->isNegative());
     }
 
-    public function test_getAbsolute_should_return_absolute_value_when_positive()
+    /**
+     * @testWith [105, 105]
+     *           [-105, 105]
+     */
+    public function test_getAbsolute_should_return_absolute_value($given, $expected)
     {
-        $this->givenNumber(105);
-
-        $this->assertEquals(105, $this->target->getAbsolute());
+        $this->givenNumber($given);
+        $this->assertEquals($expected, $this->target->getAbsolute());
     }
 
-    public function test_getAbsolute_should_return_absolute_value_when_negative()
+    /**
+     * @testWith [105.84, 105]
+     *           [-105.84, -105]
+     */
+    public function test_getInteger_should_return_integer_part($given, $expected)
     {
-        $this->givenNumber(-105);
-
-        $this->assertEquals(105, $this->target->getAbsolute());
+        $this->givenNumber($given);
+        $this->assertEquals($expected, $this->target->getInteger());
     }
 
-    public function test_getInteger_should_return_integer_part_when_positive()
+    /**
+     * @testWith [105.84, 0.84]
+     *           [-105.84, -0.84]
+     */
+    public function test_getInteger_should_return_decimal_part($given, $expected)
     {
-        $this->givenNumber(105.84);
-
-        $this->assertEquals(105, $this->target->getInteger());
-    }
-
-    public function test_getInteger_should_return_integer_part_when_negative()
-    {
-        $this->givenNumber(-105.84);
-
-        $this->assertEquals(-105, $this->target->getInteger());
-    }
-
-    public function test_getDecimal_should_return_decimal_part_when_positive()
-    {
-        $this->givenNumber(105.84);
-
-        $this->assertEquals(0.84, $this->target->getDecimal());
-    }
-
-    public function test_getDecimal_should_return_decimal_part_when_negative()
-    {
-        $this->givenNumber(-105.84);
-
-        $this->assertEquals(-0.84, $this->target->getDecimal());
+        $this->givenNumber($given);
+        $this->assertEquals($expected, $this->target->getDecimal());
     }
 
     public function test_getIntegerAbsolute_should_get_integer_part_and_is_positive()
@@ -82,32 +70,25 @@ class NumberTest extends TestCase
         $this->assertEquals(0.84, $this->target->getDecimalAbsolute());
     }
 
-    public function test_getIntegerPart_should_get_part_of_integer()
+    /**
+     * @testWith [105.84, 105]
+     *           [-105.84, 105]
+     */
+    public function test_getIntegerPart_should_get_part_of_integer($given, $expected)
     {
-        $this->givenNumber(105.84);
-
-        $this->assertEquals(105, $this->target->getIntegerPart());
+        $this->givenNumber($given);
+        $this->assertEquals($expected, $this->target->getIntegerPart());
     }
 
-    public function test_getIntegerPart_should_get_part_of_integer_when_negative()
+    /**
+     * @testWith [105.84, 84]
+     *           [-105.84, 84]
+     */
+    public function test_getDecimalPart_should_get_part_of_decimal($given, $expected)
     {
-        $this->givenNumber(-105.84);
+        $this->givenNumber($given);
 
-        $this->assertEquals(105, $this->target->getIntegerPart());
-    }
-
-    public function test_getDecimalPart_should_get_part_of_decimal()
-    {
-        $this->givenNumber(105.84);
-
-        $this->assertEquals(84, $this->target->getDecimalPart());
-    }
-
-    public function test_getDecimalPart_should_get_part_of_decimal_when_negative()
-    {
-        $this->givenNumber(-105.84);
-
-        $this->assertEquals(84, $this->target->getDecimalPart());
+        $this->assertEquals($expected, $this->target->getDecimalPart());
     }
 
     private function givenNumber($number)
