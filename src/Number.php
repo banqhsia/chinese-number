@@ -95,6 +95,6 @@ class Number
     {
         preg_match("/(\d+)\.?(\d+)?/", $this->number, $matches);
 
-        return (int) $matches[2];
+        return isset($matches[2]) ? $matches[2] : 0;
     }
 }

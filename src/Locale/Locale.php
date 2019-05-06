@@ -3,8 +3,8 @@ namespace banqhsia\ChineseNumber\Locale;
 
 class Locale
 {
-    // TODO: Setting to CN in order to make sure setLocale() works.
-    public static $locale = CN::class;
+    // TODO: Setting to TW in order to make sure setLocale() works.
+    public static $locale = TW::class;
 
     public static $locale_list = [
         'tw' => TW::class,
