@@ -18,17 +18,6 @@ trait Helper
     }
 
     /**
-     * 檢查給定的數字是否小於零（負數）
-     *
-     * @param integer $number
-     * @return boolean
-     */
-    public static function isNegative($number)
-    {
-        return $number < 0;
-    }
-
-    /**
      * 攤平陣列
      *
      * 將轉換完成的陣列攤平變成字串
@@ -45,19 +34,6 @@ trait Helper
         $flattened = implode($glue, array_filter($array));
 
         return $flattened;
-    }
-
-    /**
-     * 檢測數字是否介於某一範圍
-     *
-     * @param integer $input
-     * @param integer $from
-     * @param integer $to
-     * @return boolean
-     */
-    public static function isBetween($input, $from, $to)
-    {
-        return ($input >= $from && $input <= $to);
     }
 
     /**
