@@ -1,7 +1,7 @@
 <?php
 namespace banqhsia\ChineseNumber\Types;
 
-use banqhsia\ChineseNumber\Locale\Locale;
+use banqhsia\ChineseNumber\Locale\LocaleFactory;
 
 class Decimals extends Numbers
 {
@@ -16,7 +16,6 @@ class Decimals extends Numbers
         $this->input = $number;
     }
 
-
     /**
      * 處理小數轉換
      *
@@ -30,7 +29,7 @@ class Decimals extends Numbers
 
         $result = [];
         foreach ($chunked as $i => $set) {
-            $result[] = Locale::numbers()[$this->case][$set];
+            $result[] = LocaleFactory::numbers()[$this->case][$set];
         }
 
         return $result;

@@ -1,7 +1,7 @@
 <?php
 namespace banqhsia\ChineseNumber\Locale;
 
-class Locale
+class LocaleFactory
 {
     // TODO: Setting to TW in order to make sure setLocale() works.
     public static $locale = TW::class;
@@ -17,15 +17,15 @@ class Locale
      *
      * @param string $locale
      */
-    public static function setLocale($locale)
+    public static function createLocale($locale)
     {
         $locale = strtolower($locale);
 
         if (! array_key_exists(strtolower($locale), static::$locale_list)) {
-            throw new \Exception("Locale \"{$locale}\" is not supported.");
+            throw new \InvalidArgumentException("Locale \"{$locale}\" is not supported.");
         }
 
-        return static::$locale = static::$locale_list[$locale];
+        return static::$locale = new static::$locale_list[$locale];
     }
 
     /**

@@ -43,4 +43,9 @@ class CN
      * 負
      */
     static $minus = '负';
+
+    public static function __callStatic($value, $args)
+    {
+        return static::$$value;
+    }
 }

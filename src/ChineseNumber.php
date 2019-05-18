@@ -1,10 +1,10 @@
 <?php
 namespace banqhsia\ChineseNumber;
 
-use banqhsia\ChineseNumber\Locale\Locale;
 use banqhsia\ChineseNumber\Helpers\Helper;
 use banqhsia\ChineseNumber\Types\Decimals;
 use banqhsia\ChineseNumber\Types\Integers;
+use banqhsia\ChineseNumber\Locale\LocaleFactory;
 
 class ChineseNumber
 {
@@ -72,6 +72,8 @@ class ChineseNumber
         $this->integers = new Integers($this->number->getIntegerPart() ?? 0);
         $this->decimals = new Decimals($this->number->getDecimalPart() ?? 0);
 
+        $this->locale = LocaleFactory::createLocale($locale);
+
         $this->setLocale($locale);
     }
 
@@ -83,7 +85,7 @@ class ChineseNumber
      */
     public static function setLocale($locale)
     {
-        Locale::setLocale($locale);
+        LocaleFactory::createLocale($locale);
     }
 
     /**
@@ -105,7 +107,7 @@ class ChineseNumber
      *
      * @return $result 轉換的結果
      */
-    protected function render()
+    public function render()
     {
 
         $integers = static::flattenToString(
@@ -117,15 +119,14 @@ class ChineseNumber
         $decimals = static::flattenToString($this->decimals->getValue());
 
         $result = (function () use ($integers, $decimals) {
-
-            $result = $integers . ($decimals ? Locale::dot() . $decimals : null);
+            $result = $integers . ($decimals ? $this->locale::$dot . $decimals : null);
 
             return $this->trim($result);
         })();
 
         // 負數模式
         if ($this->minus) {
-            $result = Locale::minus() . $result;
+            $result = $this->locale::$minus . $result;
         }
 
         // 貨幣模式
@@ -167,8 +168,8 @@ class ChineseNumber
         $this->currency = true;
 
         $this->currency_units = [
-            'prepend' => ($prepend) ? $prepend : Locale::currency_units()['prepend'],
-            'append' => ($append) ? $append : Locale::currency_units()['append'],
+            'prepend' => ($prepend) ? $prepend : $this->locale::$currency_units['prepend'],
+            'append' => ($append) ? $append : $this->locale::$currency_units['append'],
         ];
 
         return $this;
@@ -212,12 +213,12 @@ class ChineseNumber
     {
 
         $string = preg_replace('/(\*+)$/m', "", $string);
-        $string = preg_replace('/\*+/', Locale::numbers()[$this->case][0], $string);
+        $string = preg_replace('/\*+/', $this->locale::$numbers[$this->case][0], $string);
 
         $string = preg_replace((function () {
 
-            $tens = Locale::numbers()[$this->case][1];
-            $ones = Locale::thousand()[$this->case][1];
+            $tens = $this->locale::$numbers[$this->case][1];
+            $ones = $this->locale::$thousand[$this->case][1];
 
             return "/^($tens)($ones)(.{1})?/";
         })(), "$2$3", $string);

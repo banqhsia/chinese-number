@@ -11,6 +11,6 @@ trait AssertionHelper
 
     private function resultShouldBe($expected)
     {
-        $this->assertEquals($expected, (string) $this->target);
+        $this->assertEquals($expected, (string) $this->target->render());
     }
 }

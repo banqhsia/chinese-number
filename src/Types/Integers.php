@@ -1,7 +1,7 @@
 <?php
 namespace banqhsia\ChineseNumber\Types;
 
-use banqhsia\ChineseNumber\Locale\Locale;
+use banqhsia\ChineseNumber\Locale\LocaleFactory;
 
 class Integers extends Numbers
 {
@@ -33,8 +33,8 @@ class Integers extends Numbers
             $thousand = [];
             foreach ($set_chunked as $j => $num) {
                 // 如果該位數為「0」，則註記 「*」
-                $proceed = ( $num == 0 ) ? "*"
-                    : Locale::numbers()[$this->case][$num] . Locale::thousand()[$this->case][$j]
+                $proceed = (0 == $num) ? "*"
+                : LocaleFactory::numbers()[$this->case][$num] . LocaleFactory::thousand()[$this->case][$j]
                 ;
 
                 $thousand[] = $proceed;
@@ -45,7 +45,7 @@ class Integers extends Numbers
                 $thousand = static::flattenToString($thousand);
                 $thousand = preg_replace('/(\*+).?$/', "", $thousand);
 
-                return ($thousand) ? $thousand . Locale::systems()[$i] : null;
+                return ($thousand) ? $thousand . LocaleFactory::systems()[$i] : null;
             })();
         }
 
@@ -62,7 +62,7 @@ class Integers extends Numbers
 
         // 輸入的數字為零，不處理
         if (static::isZero($this->input)) {
-            return [Locale::numbers()[$this->case][0]];
+            return [LocaleFactory::numbers()[$this->case][0]];
         }
 
         return $this->handler();
