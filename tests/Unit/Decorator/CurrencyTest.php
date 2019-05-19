@@ -42,4 +42,13 @@ class CurrencyTest extends TestCase
 
         $this->resultShouldBe($expected);
     }
+
+    public function test_should_allow_using_custom_prepend_and_append()
+    {
+        $this->givenNumber(150);
+
+        $this->target->currency('美金', '元');
+
+        $this->resultShouldBe('美金一百五十元');
+    }
 }
