@@ -5,6 +5,11 @@ namespace banqhsia\ChineseNumber;
 class Number
 {
     /**
+     * 零
+     */
+    const ZERO = 0;
+
+    /**
      * Construct
      *
      * @param float $number
@@ -32,6 +37,16 @@ class Number
     public function getAbsolute()
     {
         return abs($this->number);
+    }
+
+    /**
+     * 是否為零
+     *
+     * @return bool
+     */
+    public function isZero()
+    {
+        return static::ZERO === $this->number;
     }
 
     /**
@@ -83,7 +98,7 @@ class Number
     {
         preg_match("/(\d+)\.?(\d+)?/", $this->number, $matches);
 
-        return (int) $matches[1];
+        return isset($matches[1]) ? $matches[1] : 0;
     }
 
     /**
