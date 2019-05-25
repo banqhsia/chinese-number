@@ -2,7 +2,6 @@
 namespace banqhsia\ChineseNumber;
 
 use banqhsia\ChineseNumber\Helpers\Helper;
-use banqhsia\ChineseNumber\Types\Integers;
 use banqhsia\ChineseNumber\Locale\LocaleFactory;
 use banqhsia\ChineseNumber\Locale\LocaleInterface;
 
@@ -75,7 +74,7 @@ class ChineseNumber
 
         $this->locale = LocaleFactory::createLocale($locale);
 
-        $this->integers = new Integers($this->number, $this->locale);
+        $this->integer = $this->number->getIntegerObject();
         $this->decimal = $this->number->getDecimalObject();
 
         $this->setLocale($locale);
@@ -115,7 +114,7 @@ class ChineseNumber
     {
 
         $integers = static::flattenToString(
-            $this->integers->getValue(),
+            $this->getIntegerResult(),
             true,
             ($this->comma) ? $this->delimiter : ""
         );
@@ -187,7 +186,7 @@ class ChineseNumber
     {
         $this->case = 1;
 
-        $this->integers->case = $this->decimal->case = $this->case;
+        $this->integer->case = $this->decimal->case = $this->case;
 
         return $this;
     }
@@ -251,6 +250,44 @@ class ChineseNumber
         $result = [];
         foreach ($chunked as $i => $set) {
             $result[] = $this->locale->getNumber($set);
+        }
+
+        return $result;
+    }
+
+    private function getIntegerResult()
+    {
+        // 輸入的數字為零，不處理
+        if ($this->integer->isZero()) {
+            // TODO: deal with that
+            return $this->locale->getNumber(0);
+        }
+
+        $this->locale->setCase($this->case);
+
+        // 將字串按照給定的長度切割為陣列
+        $chunked = static::chunk($this->integer->getInteger(), 4);
+
+        foreach ($chunked as $i => $set) {
+            $set_chunked = static::chunk($set, 1);
+
+            $thousand = [];
+            foreach ($set_chunked as $j => $num) {
+                // 如果該位數為「0」，則註記 「*」
+                $proceed = (0 == $num) ? "*"
+                : "{$this->locale->getNumber($num)}{$this->locale->getThousand($j)}"
+                ;
+
+                $thousand[] = $proceed;
+            }
+
+            $result[] = (function () use ($thousand, $i) {
+
+                $thousand = static::flattenToString($thousand);
+                $thousand = preg_replace('/(\*+).?$/', "", $thousand);
+
+                return ($thousand) ? "$thousand{$this->locale->getSystem($i)}" : null;
+            })();
         }
 
         return $result;
