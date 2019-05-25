@@ -2,7 +2,6 @@
 namespace banqhsia\ChineseNumber;
 
 use banqhsia\ChineseNumber\Helpers\Helper;
-use banqhsia\ChineseNumber\Types\Decimals;
 use banqhsia\ChineseNumber\Types\Integers;
 use banqhsia\ChineseNumber\Locale\LocaleFactory;
 use banqhsia\ChineseNumber\Locale\LocaleInterface;
@@ -72,13 +71,12 @@ class ChineseNumber
         if ($this->number->isNegative()) {
             // 去除負號，當作整數分開處理
             $this->minus = true;
-            $number = $this->number->getAbsolute();
         }
 
         $this->locale = LocaleFactory::createLocale($locale);
 
         $this->integers = new Integers($this->number, $this->locale);
-        $this->decimals = new Decimals($this->number, $this->locale);
+        $this->decimal = $this->number->getDecimalObject();
 
         $this->setLocale($locale);
     }
@@ -122,7 +120,7 @@ class ChineseNumber
             ($this->comma) ? $this->delimiter : ""
         );
 
-        $decimals = static::flattenToString($this->decimals->getValue());
+        $decimals = static::flattenToString($this->getDecimalResult());
 
         $result = (function () use ($integers, $decimals) {
             $result = $integers . ($decimals ? $this->locale->getDot() . $decimals : null);
@@ -189,7 +187,7 @@ class ChineseNumber
     {
         $this->case = 1;
 
-        $this->integers->case = $this->decimals->case = $this->case;
+        $this->integers->case = $this->decimal->case = $this->case;
 
         return $this;
     }
@@ -239,5 +237,22 @@ class ChineseNumber
     public function __toString()
     {
         return $this->render();
+    }
+
+    private function getDecimalResult()
+    {
+        // 輸入的數字為零，不處理
+        if ($this->decimal->isZero()) {
+            return [];
+        }
+        // 將字串按照給定的長度切割為陣列
+        $chunked = $this->decimal->chunked();
+
+        $result = [];
+        foreach ($chunked as $i => $set) {
+            $result[] = $this->locale->getNumber($set);
+        }
+
+        return $result;
     }
 }
