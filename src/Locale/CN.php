@@ -1,7 +1,7 @@
 <?php
 namespace banqhsia\ChineseNumber\Locale;
 
-class CN
+class CN extends Locale
 {
     /**
      * 貨幣格式的前輟、後輟

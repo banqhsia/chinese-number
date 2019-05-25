@@ -1,19 +1,30 @@
 <?php
 namespace banqhsia\ChineseNumber\Types;
 
-use banqhsia\ChineseNumber\Locale\LocaleFactory;
+use banqhsia\ChineseNumber\Number;
+use banqhsia\ChineseNumber\Locale\LocaleInterface;
 
 class Decimals extends Numbers
 {
+    /**
+     * @var Number
+     */
+    private $number;
+
+    /**
+     * @var LocaleInterface
+     */
+    private $locale;
 
     /**
      * Construct
      *
      * @param integer $number
      */
-    public function __construct($number = 0)
+    public function __construct(Number $number, LocaleInterface $locale)
     {
-        $this->input = $number;
+        $this->number = $number;
+        $this->locale = $locale;
     }
 
     /**
@@ -25,11 +36,11 @@ class Decimals extends Numbers
     {
 
         // 將字串按照給定的長度切割為陣列
-        $chunked = static::chunk($this->input, 1);
+        $chunked = static::chunk($this->number->getDecimalPart(), 1);
 
         $result = [];
         foreach ($chunked as $i => $set) {
-            $result[] = LocaleFactory::numbers()[$this->case][$set];
+            $result[] = $this->locale->getNumber($set);
         }
 
         return $result;
@@ -42,9 +53,8 @@ class Decimals extends Numbers
      */
     public function getValue()
     {
-
         // 輸入的數字為零，不處理
-        if (static::isZero($this->input)) {
+        if (static::isZero($this->number->getDecimalPart())) {
             return [];
         }
 

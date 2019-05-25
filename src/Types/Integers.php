@@ -1,19 +1,31 @@
 <?php
 namespace banqhsia\ChineseNumber\Types;
 
-use banqhsia\ChineseNumber\Locale\LocaleFactory;
+use banqhsia\ChineseNumber\Number;
+use banqhsia\ChineseNumber\Locale\Locale;
+use banqhsia\ChineseNumber\Locale\LocaleInterface;
 
 class Integers extends Numbers
 {
+    /**
+     * @var Number
+     */
+    private $number;
+
+    /**
+     * @var LocaleInterface
+     */
+    private $locale;
 
     /**
      * Construct
      *
      * @param integer $number
      */
-    public function __construct($number = 0)
+    public function __construct(Number $number, LocaleInterface $locale)
     {
-        $this->input = $number;
+        $this->number = $number;
+        $this->locale = $locale;
     }
 
     /**
@@ -23,9 +35,10 @@ class Integers extends Numbers
      */
     public function handler()
     {
+        $this->locale->setCase($this->case);
 
         // 將字串按照給定的長度切割為陣列
-        $chunked = static::chunk($this->input, 4);
+        $chunked = static::chunk($this->number->getIntegerPart(), 4);
 
         foreach ($chunked as $i => $set) {
             $set_chunked = static::chunk($set, 1);
@@ -34,7 +47,7 @@ class Integers extends Numbers
             foreach ($set_chunked as $j => $num) {
                 // 如果該位數為「0」，則註記 「*」
                 $proceed = (0 == $num) ? "*"
-                : LocaleFactory::numbers()[$this->case][$num] . LocaleFactory::thousand()[$this->case][$j]
+                : "{$this->locale->getNumber($num)}{$this->locale->getThousand($j)}"
                 ;
 
                 $thousand[] = $proceed;
@@ -45,7 +58,7 @@ class Integers extends Numbers
                 $thousand = static::flattenToString($thousand);
                 $thousand = preg_replace('/(\*+).?$/', "", $thousand);
 
-                return ($thousand) ? $thousand . LocaleFactory::systems()[$i] : null;
+                return ($thousand) ? "$thousand{$this->locale->getSystem($i)}" : null;
             })();
         }
 
@@ -59,10 +72,9 @@ class Integers extends Numbers
      */
     public function getValue()
     {
-
         // 輸入的數字為零，不處理
-        if (static::isZero($this->input)) {
-            return [LocaleFactory::numbers()[$this->case][0]];
+        if ($this->number->isZero()) {
+            return $this->number->getNumber(0);
         }
 
         return $this->handler();

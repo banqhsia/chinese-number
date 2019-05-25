@@ -5,6 +5,7 @@ use banqhsia\ChineseNumber\Helpers\Helper;
 use banqhsia\ChineseNumber\Types\Decimals;
 use banqhsia\ChineseNumber\Types\Integers;
 use banqhsia\ChineseNumber\Locale\LocaleFactory;
+use banqhsia\ChineseNumber\Locale\LocaleInterface;
 
 class ChineseNumber
 {
@@ -53,6 +54,11 @@ class ChineseNumber
     protected $case = 0;
 
     /**
+     * @var LocaleInterface
+     */
+    private $locale;
+
+    /**
      * Construct
      *
      * @param int|float $number
@@ -69,10 +75,10 @@ class ChineseNumber
             $number = $this->number->getAbsolute();
         }
 
-        $this->integers = new Integers($this->number->getIntegerPart() ?? 0);
-        $this->decimals = new Decimals($this->number->getDecimalPart() ?? 0);
-
         $this->locale = LocaleFactory::createLocale($locale);
+
+        $this->integers = new Integers($this->number, $this->locale);
+        $this->decimals = new Decimals($this->number, $this->locale);
 
         $this->setLocale($locale);
     }
@@ -119,19 +125,19 @@ class ChineseNumber
         $decimals = static::flattenToString($this->decimals->getValue());
 
         $result = (function () use ($integers, $decimals) {
-            $result = $integers . ($decimals ? $this->locale::$dot . $decimals : null);
+            $result = $integers . ($decimals ? $this->locale->getDot() . $decimals : null);
 
             return $this->trim($result);
         })();
 
         // 負數模式
         if ($this->minus) {
-            $result = $this->locale::$minus . $result;
+            $result = "{$this->locale->getMinus()}$result";
         }
 
         // 貨幣模式
         if ($this->currency) {
-            $result = $this->currency_units['prepend'] . $result . $this->currency_units['append'];
+            $result = "{$this->currencyUnits['prepend']}{$result}{$this->currencyUnits['append']}";
         }
 
         return $result;
@@ -162,14 +168,13 @@ class ChineseNumber
      * @param string $append
      * @return $this
      */
-    public function currency(string $prepend = "", string $append = "")
+    public function currency($prepend = null, $append = null)
     {
-
         $this->currency = true;
 
-        $this->currency_units = [
-            'prepend' => ($prepend) ? $prepend : $this->locale::$currency_units['prepend'],
-            'append' => ($append) ? $append : $this->locale::$currency_units['append'],
+        $this->currencyUnits = [
+            'prepend' => ($prepend) ?: $this->locale->getCurrencyPrepend(),
+            'append' => ($append) ?: $this->locale->getCurrencyAppend(),
         ];
 
         return $this;
