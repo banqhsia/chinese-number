@@ -2,12 +2,13 @@
 namespace banqhsia\ChineseNumber\Types;
 
 use banqhsia\ChineseNumber\Number;
+use banqhsia\ChineseNumber\Decimal;
 use banqhsia\ChineseNumber\Locale\LocaleInterface;
 
 class Decimals extends Numbers
 {
     /**
-     * @var Number
+     * @var Decimal
      */
     private $number;
 
@@ -23,7 +24,7 @@ class Decimals extends Numbers
      */
     public function __construct(Number $number, LocaleInterface $locale)
     {
-        $this->number = $number;
+        $this->number = $number->getDecimalObject();
         $this->locale = $locale;
     }
 
@@ -36,7 +37,7 @@ class Decimals extends Numbers
     {
 
         // 將字串按照給定的長度切割為陣列
-        $chunked = static::chunk($this->number->getDecimalPart(), 1);
+        $chunked = static::chunk($this->number->getDecimal(), 1);
 
         $result = [];
         foreach ($chunked as $i => $set) {
@@ -54,7 +55,7 @@ class Decimals extends Numbers
     public function getValue()
     {
         // 輸入的數字為零，不處理
-        if (static::isZero($this->number->getDecimalPart())) {
+        if ($this->number->isZero()) {
             return [];
         }
 

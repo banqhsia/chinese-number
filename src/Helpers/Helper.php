@@ -35,15 +35,4 @@ trait Helper
 
         return $flattened;
     }
-
-    /**
-     * 是否為零
-     *
-     * @param integer $number
-     * @return boolean
-     */
-    public static function isZero($number = 0)
-    {
-        return (0 == $number);
-    }
 }

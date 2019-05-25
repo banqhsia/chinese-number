@@ -2,13 +2,14 @@
 namespace banqhsia\ChineseNumber\Types;
 
 use banqhsia\ChineseNumber\Number;
+use banqhsia\ChineseNumber\Integer;
 use banqhsia\ChineseNumber\Locale\Locale;
 use banqhsia\ChineseNumber\Locale\LocaleInterface;
 
 class Integers extends Numbers
 {
     /**
-     * @var Number
+     * @var Integer
      */
     private $number;
 
@@ -24,7 +25,7 @@ class Integers extends Numbers
      */
     public function __construct(Number $number, LocaleInterface $locale)
     {
-        $this->number = $number;
+        $this->number = $number->getIntegerObject();
         $this->locale = $locale;
     }
 
@@ -38,7 +39,7 @@ class Integers extends Numbers
         $this->locale->setCase($this->case);
 
         // 將字串按照給定的長度切割為陣列
-        $chunked = static::chunk($this->number->getIntegerPart(), 4);
+        $chunked = static::chunk($this->number->getInteger(), 4);
 
         foreach ($chunked as $i => $set) {
             $set_chunked = static::chunk($set, 1);
@@ -74,6 +75,7 @@ class Integers extends Numbers
     {
         // 輸入的數字為零，不處理
         if ($this->number->isZero()) {
+            // TODO: deal with that
             return $this->number->getNumber(0);
         }
 
