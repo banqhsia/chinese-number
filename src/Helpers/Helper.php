@@ -3,18 +3,14 @@ namespace banqhsia\ChineseNumber\Helpers;
 
 trait Helper
 {
-
     /**
      * 將字串依照給定的片段長度，分割成陣列
      *
      * PHP 預設的切割是從左開始，所以必須先將文字全部反轉再切割
      */
-    public static function chunk($string, $length = 1, $reverse = false)
+    public static function chunk($string, $length = 1)
     {
-
-        $chunked = array_map('strrev', str_split(strrev($string), $length));
-
-        return ($reverse) ? array_reverse($chunked) : $chunked;
+        return array_map('strrev', str_split(strrev($string), $length));
     }
 
     /**
