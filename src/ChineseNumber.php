@@ -10,13 +10,6 @@ class ChineseNumber
     use Helper;
 
     /**
-     * 分割出的數字
-     *
-     * @var array
-     */
-    protected $numbers = [];
-
-    /**
      * 數字是否帶有正負號
      *
      * @var boolean
@@ -116,7 +109,7 @@ class ChineseNumber
         $integers = static::flattenToString(
             $this->getIntegerResult(),
             true,
-            ($this->comma) ? $this->delimiter : ""
+            ($this->comma) ? $this->delimiter : null
         );
 
         $decimals = static::flattenToString($this->getDecimalResult());
@@ -148,12 +141,10 @@ class ChineseNumber
      * @param string $delimiter
      * @return $this
      */
-    public function comma(string $delimiter = null)
+    public function comma($delimiter = null)
     {
-
         $this->comma = true;
-
-        $this->delimiter = ($delimiter) ? $delimiter : $this->delimiter;
+        $this->delimiter = ($delimiter) ?: $this->delimiter;
 
         return $this;
     }
@@ -185,8 +176,7 @@ class ChineseNumber
     public function upper()
     {
         $this->case = 1;
-
-        $this->integer->case = $this->decimal->case = $this->case;
+        $this->locale->setCase($this->case);
 
         return $this;
     }
@@ -262,8 +252,6 @@ class ChineseNumber
             // TODO: deal with that
             return $this->locale->getNumber(0);
         }
-
-        $this->locale->setCase($this->case);
 
         // 將字串按照給定的長度切割為陣列
         $chunked = static::chunk($this->integer->getInteger(), 4);
