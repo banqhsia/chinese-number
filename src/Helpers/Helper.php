@@ -23,12 +23,8 @@ trait Helper
      * @param string $glue
      * @return $flattened 已變成字串的轉換結果
      */
-    public static function flattenToString(array $array, $reverse = true, $glue = "")
+    public static function flattenToString(array $array, $glue = "")
     {
-        $array = ($reverse) ? array_reverse($array) : $array;
-
-        $flattened = implode($glue, array_filter($array));
-
-        return $flattened;
+        return implode($glue, array_filter(array_reverse($array)));
     }
 }

@@ -107,7 +107,6 @@ class ChineseNumber
     {
         $integers = static::flattenToString(
             $this->getIntegerResult(),
-            true,
             ($this->comma) ? $this->delimiter : null
         );
 
