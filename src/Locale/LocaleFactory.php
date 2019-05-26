@@ -6,7 +6,7 @@ class LocaleFactory
     // TODO: Setting to TW in order to make sure setLocale() works.
     public static $locale = TW::class;
 
-    public static $locale_list = [
+    public static $localeList = [
         'tw' => TW::class,
         'cn' => CN::class,
         'hk' => HK::class,
@@ -21,11 +21,11 @@ class LocaleFactory
     {
         $locale = strtolower($locale);
 
-        if (! array_key_exists(strtolower($locale), static::$locale_list)) {
+        if (! array_key_exists(strtolower($locale), static::$localeList)) {
             throw new \InvalidArgumentException("Locale \"{$locale}\" is not supported.");
         }
 
-        return static::$locale = new static::$locale_list[$locale];
+        return static::$locale = new static::$localeList[$locale];
     }
 
     /**

@@ -250,10 +250,10 @@ class ChineseNumber
         $chunked = static::chunk($this->integer->getInteger(), 4);
 
         foreach ($chunked as $i => $set) {
-            $set_chunked = static::chunk($set, 1);
+            $setChunked = static::chunk($set, 1);
 
             $thousand = [];
-            foreach ($set_chunked as $j => $num) {
+            foreach ($setChunked as $j => $num) {
                 // 如果該位數為「0」，則註記 「*」
                 $proceed = (0 == $num) ? "*"
                 : "{$this->locale->getNumber($num)}{$this->locale->getThousand($j)}"
