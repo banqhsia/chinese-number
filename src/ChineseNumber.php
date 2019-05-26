@@ -105,7 +105,6 @@ class ChineseNumber
      */
     public function render()
     {
-
         $integers = static::flattenToString(
             $this->getIntegerResult(),
             true,
@@ -114,11 +113,7 @@ class ChineseNumber
 
         $decimals = static::flattenToString($this->getDecimalResult());
 
-        $result = (function () use ($integers, $decimals) {
-            $result = $integers . ($decimals ? $this->locale->getDot() . $decimals : null);
-
-            return $this->trim($result);
-        })();
+        $result = $this->trim($integers . ($decimals ? $this->locale->getDot() . $decimals : null));
 
         // 負數模式
         if ($this->minus) {
@@ -201,19 +196,17 @@ class ChineseNumber
      * @param string $string
      * @return $string 處理過的字串
      */
-    public function trim($string)
+    private function trim($string)
     {
-
+        // refactor memo: 句尾的 *** 去除
         $string = preg_replace('/(\*+)$/m', "", $string);
-        $string = preg_replace('/\*+/', $this->locale::$numbers[$this->case][0], $string);
 
-        $string = preg_replace((function () {
+        // refactor memo: * 變 0
+        $string = preg_replace('/\*+/', $this->locale->getNumber(0), $string);
 
-            $tens = $this->locale::$numbers[$this->case][1];
-            $ones = $this->locale::$thousand[$this->case][1];
-
-            return "/^($tens)($ones)(.{1})?/";
-        })(), "$2$3", $string);
+        $tens = $this->locale->getNumber(1);
+        $ones = $this->locale->getThousand(1);
+        $string = preg_replace("/^($tens)($ones)(.{1})?/", "$2$3", $string);
 
         return $string;
     }
@@ -269,13 +262,10 @@ class ChineseNumber
                 $thousand[] = $proceed;
             }
 
-            $result[] = (function () use ($thousand, $i) {
+            $thousand = static::flattenToString($thousand);
+            $thousand = preg_replace('/(\*+).?$/', "", $thousand);
 
-                $thousand = static::flattenToString($thousand);
-                $thousand = preg_replace('/(\*+).?$/', "", $thousand);
-
-                return ($thousand) ? "$thousand{$this->locale->getSystem($i)}" : null;
-            })();
+            $result[] = ($thousand) ? "$thousand{$this->locale->getSystem($i)}" : null;
         }
 
         return $result;
