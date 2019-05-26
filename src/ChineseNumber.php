@@ -7,7 +7,6 @@ use banqhsia\ChineseNumber\Locale\LocaleInterface;
 
 class ChineseNumber
 {
-    use Helper;
 
     /**
      * 數字是否帶有正負號
@@ -105,12 +104,12 @@ class ChineseNumber
      */
     public function render()
     {
-        $integers = static::flattenToString(
+        $integers = Helper::flattenToString(
             $this->getIntegerResult(),
             ($this->comma) ? $this->delimiter : null
         );
 
-        $decimals = static::flattenToString($this->getDecimalResult());
+        $decimals = Helper::flattenToString($this->getDecimalResult());
 
         $result = $this->trim($integers . ($decimals ? $this->locale->getDot() . $decimals : null));
 
@@ -246,10 +245,10 @@ class ChineseNumber
         }
 
         // 將字串按照給定的長度切割為陣列
-        $chunked = static::chunk($this->integer->getInteger(), 4);
+        $chunked = Helper::chunk($this->integer->getInteger(), 4);
 
         foreach ($chunked as $i => $set) {
-            $setChunked = static::chunk($set, 1);
+            $setChunked = Helper::chunk($set, 1);
 
             $thousand = [];
             foreach ($setChunked as $j => $num) {
@@ -261,7 +260,7 @@ class ChineseNumber
                 $thousand[] = $proceed;
             }
 
-            $thousand = static::flattenToString($thousand);
+            $thousand = Helper::flattenToString($thousand);
             $thousand = preg_replace('/(\*+).?$/', "", $thousand);
 
             $result[] = ($thousand) ? "$thousand{$this->locale->getSystem($i)}" : null;

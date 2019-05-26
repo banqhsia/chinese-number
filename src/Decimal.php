@@ -6,8 +6,6 @@ use banqhsia\ChineseNumber\Helpers\Helper;
 
 class Decimal
 {
-    use Helper;
-
     public function __construct($decimal)
     {
         $this->decimal = $decimal;
@@ -25,6 +23,6 @@ class Decimal
 
     public function chunked()
     {
-        return static::chunk($this->getDecimal(), 1);
+        return Helper::chunk($this->getDecimal(), 1);
     }
 }
