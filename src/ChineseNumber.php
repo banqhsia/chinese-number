@@ -58,7 +58,6 @@ class ChineseNumber
     {
         $this->number = new Number($number);
 
-        // 檢查輸入的數字是否為負數
         if ($this->number->isNegative()) {
             // 去除負號，當作整數分開處理
             $this->minus = true;
@@ -66,10 +65,8 @@ class ChineseNumber
 
         $this->locale = LocaleFactory::createLocale($locale);
 
-        $this->integer = $this->number->getIntegerObject();
-        $this->decimal = $this->number->getDecimalObject();
-
-        $this->setLocale($locale);
+        $this->integer = new Integer($this->number->getIntegerPart());
+        $this->decimal = new Decimal($this->number->getDecimalPart());
     }
 
     /**
@@ -229,7 +226,7 @@ class ChineseNumber
         $chunked = $this->decimal->chunked();
 
         $result = [];
-        foreach ($chunked as $i => $set) {
+        foreach ($chunked as $set) {
             $result[] = $this->locale->getNumber($set);
         }
 
